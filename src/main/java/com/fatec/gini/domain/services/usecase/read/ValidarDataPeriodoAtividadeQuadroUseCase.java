@@ -34,14 +34,40 @@ public class ValidarDataPeriodoAtividadeQuadroUseCase {
 
 
    public void periodoValido(LocalDate dataInicio, LocalDate dataFim, Integer periodo) {
-    // calcula o total de meses entre as duas datas
-    long totalMeses = ChronoUnit.MONTHS.between(dataInicio, dataFim);
-    
-    // calcula quantos períodos (semestres) cabem nesse intervalo de meses
-    long periodosCalculados = totalMeses / 6;
-    
-    if (periodo != periodosCalculados) {
-        throw new ParameterException("Período informado não corresponde ao intervalo entre a data de início e fim.");
+
+     long totalMeses = ChronoUnit.MONTHS.between(dataInicio, dataFim);
+
+    // Garante que as datas representam meses completos
+    if (!dataInicio.plusMonths(totalMeses).equals(dataFim)) {
+        throw new ParameterException(
+            "O intervalo entre as datas não corresponde a meses completos."
+        );
     }
+
+    // Semestral
+    if (totalMeses == 6) {
+        if (dataInicio.getMonthValue() == 1 || dataInicio.getMonthValue() == 7) {
+        return; // Primeiro semestre
+        } else {
+            throw new ParameterException(
+                "O intervalo entre as datas deve corresponder a um período semestral."
+            );
+        
+        }
+
+    } 
+    
+    if (totalMeses == 12) {
+     if(dataInicio.getMonthValue() == 1) {
+        return;
+     } 
+     
+    }
+
+    throw new ParameterException(
+        "O intervalo entre as datas deve corresponder a um período semestral ou anual."
+    );
 }
+
+
 }

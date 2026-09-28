@@ -66,6 +66,7 @@ public class PeriodoAtividadeQuadroService {
     public PeriodoAtividadeQuadroResponse atualizar(long id, PeriodoAtividadeQuadroRequest request) {
         atividadeQuadroUseCase.executar(request.dataInicio(), request.dataFim());
         atividadeQuadroUseCase.executarAno(request.ano(), request.dataInicio());
+        atividadeQuadroUseCase.periodoValido(request.dataInicio(), request.dataFim(), request.periodo());
 
 
         PeriodoAtividadeQuadro entity = repository.findById(id)
