@@ -40,7 +40,7 @@ public class ConfiguracaoSeguranca {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:4200","https://gini-disponibilidade.vercel.app")
+                        .allowedOrigins("http://localhost:4200","https://gini-disponibilidade.vercel.app",  "http://localhost:8081")
                         .allowedMethods("*");
             }
 

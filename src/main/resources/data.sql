@@ -207,8 +207,72 @@ INSERT INTO alocacao (dia_semana, id_bloco_horario, id_disciplina, id_professor,
  (SELECT id_turma FROM turma WHERE codigo = '1/2026-LOG'), '2026-01-20 08:15:00', '2026-01-20 08:15:00');
 
 
+-- Agenda demonstrativa para visualizar varios horarios na tela mobile.
+-- Mantem os quadros ativos dentro do segundo semestre de 2026.
+UPDATE quadro_horario
+SET id_periodo_atividade_quadro = (
+    SELECT id_periodo_atividade_quadro FROM periodo_atividade_quadro
+    WHERE ano = 2026 AND periodo = 2
+)
+WHERE status = 'ATIVO';
+
+-- Carlos: quatro aulas por dia, de segunda a sexta, no LAB-01.
+-- Preserva as alocacoes originais e evita repetir professor/dia/bloco.
+INSERT INTO alocacao (dia_semana, id_bloco_horario, id_disciplina,
+                     id_professor, id_quadro_horario, id_sala, id_turma)
+SELECT dias.dia, b.id_bloco_horario, d.id_disciplina,
+       p.id_professor, q.id_quadro_horario, s.id_sala, t.id_turma
+FROM (VALUES (1), (2), (3), (4), (5)) AS dias(dia)
+CROSS JOIN bloco_horario b
+JOIN disciplina d ON d.cod_disciplina = CASE
+    WHEN b.hora_inicio < TIME '15:00:00' THEN 'ISW044' ELSE 'BD001' END
+JOIN professor p ON p.email = 'carlos@cps.sp.gov.br'
+JOIN quadro_horario q ON q.id_curso = d.id_curso AND q.status = 'ATIVO'
+JOIN sala s ON s.codigo = 'LAB-01'
+JOIN turma t ON t.codigo = '1/2026'
+WHERE b.hora_inicio IN (TIME '13:20:00', TIME '14:10:00',
+                       TIME '15:10:00', TIME '16:00:00')
+AND NOT EXISTS (
+    SELECT 1 FROM alocacao a
+    WHERE a.id_professor = p.id_professor AND a.dia_semana = dias.dia
+      AND a.id_bloco_horario = b.id_bloco_horario
+);
+
+-- Mariana: quatro aulas noturnas por dia, sem conflito com Carlos.
+INSERT INTO alocacao (dia_semana, id_bloco_horario, id_disciplina,
+                     id_professor, id_quadro_horario, id_sala, id_turma)
+SELECT dias.dia, b.id_bloco_horario, d.id_disciplina,
+       p.id_professor, q.id_quadro_horario, s.id_sala, t.id_turma
+FROM (VALUES (1), (2), (3), (4), (5)) AS dias(dia)
+CROSS JOIN bloco_horario b
+JOIN disciplina d ON d.cod_disciplina = 'ES002'
+JOIN professor p ON p.email = 'mariana@cps.sp.gov.br'
+JOIN quadro_horario q ON q.id_curso = d.id_curso AND q.status = 'ATIVO'
+JOIN sala s ON s.codigo = 'SALA-21'
+JOIN turma t ON t.codigo = '2/2026-ADS'
+WHERE b.hora_inicio IN (TIME '18:50:00', TIME '19:40:00',
+                       TIME '20:40:00', TIME '21:30:00');
+
+-- Disponibilidade correspondente as novas aulas de demonstracao.
+INSERT INTO disponibilidade_professor (dia_semana, id_bloco_horario, id_professor)
+SELECT DISTINCT CASE a.dia_semana
+    WHEN 1 THEN 'SEGUNDA' WHEN 2 THEN 'TERCA' WHEN 3 THEN 'QUARTA'
+    WHEN 4 THEN 'QUINTA' WHEN 5 THEN 'SEXTA' END,
+    a.id_bloco_horario, a.id_professor
+FROM alocacao a
+JOIN professor p ON p.id_professor = a.id_professor
+WHERE p.email IN ('carlos@cps.sp.gov.br', 'mariana@cps.sp.gov.br')
+AND NOT EXISTS (
+    SELECT 1 FROM disponibilidade_professor dp
+    WHERE dp.id_professor = a.id_professor AND dp.dia_semana = CASE a.dia_semana
+        WHEN 1 THEN 'SEGUNDA' WHEN 2 THEN 'TERCA' WHEN 3 THEN 'QUARTA'
+        WHEN 4 THEN 'QUINTA' WHEN 5 THEN 'SEXTA' END
+      AND dp.id_bloco_horario = a.id_bloco_horario
+);
+
 INSERT INTO usuario (nome, email, senha, status, created_at, updated_at, tipo_usuario, id_curso) VALUES
 ('coordenadora.ads', 'coordenadora.ads@gini.com', '$2a$10$oHzz0j333M3RjQSQoRneK.RB0AxUr9T308Tt10fkhJposh9Mqhx.a', 'ATIVO', '2026-01-10 08:30:00', '2026-01-10 08:30:00', 'COORDENADOR', (SELECT id_curso FROM curso WHERE nome = 'Analise e Desenvolvimento de Sistemas')),
 ('coordenador.gti', 'coordenador.gti@gini.com', '$2a$10$oHzz0j333M3RjQSQoRneK.RB0AxUr9T308Tt10fkhJposh9Mqhx.a', 'ATIVO', '2026-01-10 08:30:00', '2026-01-10 08:30:00', 'COORDENADOR', (SELECT id_curso FROM curso WHERE nome = 'Gestão Tecnologia da Informação')),
 ('usuario.inativo', 'usuario.inativo@gini.com', '$2a$10$oHzz0j333M3RjQSQoRneK.RB0AxUr9T308Tt10fkhJposh9Mqhx.a', 'INATIVO', '2026-01-10 08:30:00', '2026-01-10 08:30:00', 'COORDENADOR', (SELECT id_curso FROM curso WHERE nome = 'Logistica'));
+
 
