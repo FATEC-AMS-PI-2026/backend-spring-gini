@@ -3,6 +3,7 @@ package com.fatec.gini.web.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import com.fatec.gini.dto.auth.RedefinirSenhaRequest;
 import com.fatec.gini.dto.auth.RefreshTokenRequest;
 import com.fatec.gini.dto.auth.SolicitarRecuperacaoSenhaRequest;
 import com.fatec.gini.domain.services.PasswordResetService;
+import com.fatec.gini.web.exception.AuthenticationException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -55,7 +57,12 @@ public class AutenticacaoController {
                                 request.senha());
 
                 // Verifica as credenciais e recupera o usuario autenticado.
-                var authentication = authenticationManager.authenticate(usernamePassword);
+                Authentication authentication;
+                try {
+                        authentication = authenticationManager.authenticate(usernamePassword);
+                } catch (org.springframework.security.core.AuthenticationException exception) {
+                        throw new AuthenticationException("E-mail ou senha inválidos");
+                }
 
                 Usuario usuario = (Usuario) authentication.getPrincipal();
 

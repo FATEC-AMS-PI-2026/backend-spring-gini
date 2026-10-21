@@ -59,7 +59,7 @@ public class ConfiguracaoSegurancaTest {
 
         return http
                 .csrf(csrf -> csrf.disable())
-            .headers(headers -> headers.frameOptions(frame -> frame.disable()))
+                .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
 
@@ -74,7 +74,7 @@ public class ConfiguracaoSegurancaTest {
 
                         .requestMatchers(HttpMethod.GET, "/grades/**")
                         .permitAll()
-                        
+
                         // Libera a interface, os arquivos estaticos e a especificacao do Swagger.
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**")
                         .permitAll()
@@ -113,18 +113,18 @@ public class ConfiguracaoSegurancaTest {
                         .hasRole("ADMIN")
 
                         .requestMatchers(HttpMethod.POST, "/salas/**", "/tipos-salas/**", "/recursos/**",
-                            "/tipos-recursos/**", "/recursos-salas/**", "/bloco-horarios/**",
-                            "/disponibilidades-professores/**", "/periodos-atividade-quadro/**")
+                                "/tipos-recursos/**", "/recursos-salas/**", "/bloco-horarios/**",
+                                "/disponibilidades-professores/**", "/periodos-atividade-quadro/**")
                         .hasRole("ADMIN")
 
                         .requestMatchers(HttpMethod.PUT, "/salas/**", "/tipos-salas/**", "/recursos/**",
-                            "/tipos-recursos/**", "/recursos-salas/**", "/bloco-horarios/**",
-                            "/disponibilidades-professores/**", "/periodos-atividade-quadro/**")
+                                "/tipos-recursos/**", "/recursos-salas/**", "/bloco-horarios/**",
+                                "/disponibilidades-professores/**", "/periodos-atividade-quadro/**")
                         .hasRole("ADMIN")
 
                         .requestMatchers(HttpMethod.DELETE, "/salas/**", "/tipos-salas/**", "/recursos/**",
-                            "/tipos-recursos/**", "/recursos-salas/**", "/bloco-horarios/**",
-                            "/disponibilidades-professores/**", "/periodos-atividade-quadro/**")
+                                "/tipos-recursos/**", "/recursos-salas/**", "/bloco-horarios/**",
+                                "/disponibilidades-professores/**", "/periodos-atividade-quadro/**")
                         .hasRole("ADMIN")
 
                         .anyRequest().authenticated())

@@ -33,6 +33,23 @@ public class ResourceExceptionHandler {
         return ResponseEntity.status(status).body(error);
     }
 
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<StandardError> authenticationException(
+            AuthenticationException exception,
+            HttpServletRequest request) {
+
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+
+        StandardError error = new StandardError();
+        error.setTimeStamp(Instant.now());
+        error.setStatus(status.value());
+        error.setError("Credenciais inválidas");
+        error.setMessage("E-mail ou senha inválidos");
+        error.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(status).body(error);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationError> validationException(
             MethodArgumentNotValidException exception,

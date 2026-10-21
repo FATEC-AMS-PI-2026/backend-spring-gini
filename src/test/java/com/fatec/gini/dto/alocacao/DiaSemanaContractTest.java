@@ -32,6 +32,14 @@ class DiaSemanaContractTest {
     }
 
     @Test
+    void deveRejeitarDiaNumericoEmValidarCargaHorariaRequest() {
+        assertThatThrownBy(() -> objectMapper.readValue(
+                "{\"dia_semana\":1}",
+                ValidarCargaHorariaRequest.class))
+                .isInstanceOf(JsonMappingException.class);
+    }
+
+    @Test
     void deveManterOrdemLogicaDosDias() {
         assertThat(DiaSemana.SÁBADO.anterior()).isEqualTo(DiaSemana.SEXTA);
         assertThat(DiaSemana.SÁBADO.posterior()).isEqualTo(DiaSemana.DOMINGO);

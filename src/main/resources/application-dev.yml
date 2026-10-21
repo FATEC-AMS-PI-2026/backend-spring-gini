@@ -27,6 +27,12 @@ spring:
           auth: ${SMTP_AUTH:false}
           starttls:
             enable: ${SMTP_STARTTLS:false}
+            required: ${SMTP_STARTTLS_REQUIRED:false}
+          ssl:
+            trust: ${SMTP_SSL_TRUST:*}
+          connectiontimeout: 10000
+          timeout: 10000
+          writetimeout: 10000
 app:
   frontend-url: ${FRONTEND_URL:http://localhost:3000}
   mail:

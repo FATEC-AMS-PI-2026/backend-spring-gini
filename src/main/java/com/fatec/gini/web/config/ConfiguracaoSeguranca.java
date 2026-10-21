@@ -33,19 +33,19 @@ public class ConfiguracaoSeguranca {
      * @return
      * @return
      */
-@Bean
-WebMvcConfigurer corsConfigurer() {
-    return new WebMvcConfigurer() {
-        @Override
-        public void addCorsMappings(CorsRegistry registry) {
-            registry.addMapping("/**")
-                    .allowedOriginPatterns("*") // Permite qualquer origem em dev
-                    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
-                    .allowedHeaders("*")
-                    .allowCredentials(true);
-        }
-    };
-}
+    @Bean
+    WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOriginPatterns("*") // Permite qualquer origem em dev
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
+            }
+        };
+    }
 
     /**
      * Configurações de segurança para a aplicação.
@@ -111,18 +111,18 @@ WebMvcConfigurer corsConfigurer() {
                         .hasRole("ADMIN")
 
                         .requestMatchers(HttpMethod.POST, "/salas/**", "/tipos-salas/**", "/recursos/**",
-                            "/tipos-recursos/**", "/recursos-salas/**", "/bloco-horarios/**",
-                            "/disponibilidades-professores/**", "/periodos-atividade-quadro/**")
+                                "/tipos-recursos/**", "/recursos-salas/**", "/bloco-horarios/**",
+                                "/disponibilidades-professores/**", "/periodos-atividade-quadro/**")
                         .hasRole("ADMIN")
 
                         .requestMatchers(HttpMethod.PUT, "/salas/**", "/tipos-salas/**", "/recursos/**",
-                            "/tipos-recursos/**", "/recursos-salas/**", "/bloco-horarios/**",
-                            "/disponibilidades-professores/**", "/periodos-atividade-quadro/**")
+                                "/tipos-recursos/**", "/recursos-salas/**", "/bloco-horarios/**",
+                                "/disponibilidades-professores/**", "/periodos-atividade-quadro/**")
                         .hasRole("ADMIN")
 
                         .requestMatchers(HttpMethod.DELETE, "/salas/**", "/tipos-salas/**", "/recursos/**",
-                            "/tipos-recursos/**", "/recursos-salas/**", "/bloco-horarios/**",
-                            "/disponibilidades-professores/**", "/periodos-atividade-quadro/**")
+                                "/tipos-recursos/**", "/recursos-salas/**", "/bloco-horarios/**",
+                                "/disponibilidades-professores/**", "/periodos-atividade-quadro/**")
                         .hasRole("ADMIN")
 
                         .anyRequest().authenticated())

@@ -32,6 +32,7 @@ ALTER TABLE usuario ALTER COLUMN updated_at SET DEFAULT CURRENT_TIMESTAMP;
 -- 1. USUÁRIOS
 INSERT INTO usuario (nome, email, senha, status, tipo_usuario) VALUES
 ('adm', 'adm@gini.com', '$2a$10$oHzz0j333M3RjQSQoRneK.RB0AxUr9T308Tt10fkhJposh9Mqhx.a', 'ATIVO', 'ADMINISTRADOR'),
+('Felipe', 'felipesp.chaves@gmail.com', '$2a$10$oHzz0j333M3RjQSQoRneK.RB0AxUr9T308Tt10fkhJposh9Mqhx.a', 'ATIVO', 'ADMINISTRADOR'),
 ('coordenador', 'coordenador@gini.com', '$2a$10$oHzz0j333M3RjQSQoRneK.RB0AxUr9T308Tt10fkhJposh9Mqhx.a', 'ATIVO', 'COORDENADOR');
 
 -- 2. PROFESSORES
