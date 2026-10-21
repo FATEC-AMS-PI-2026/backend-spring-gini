@@ -21,8 +21,8 @@ public record AlocacaoResponse(
         DiaSemana diaSemana,
         BlocoHorarioResponse blocoHorario,
         QuadroHorarioResponse quadroHorario,
-        LocalDateTime created_at,
-        LocalDateTime updated_at
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
     
     ) {
 }

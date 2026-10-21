@@ -33,7 +33,7 @@ public class RecursoService {
         Recurso entity = RecursoMapper.toEntity(request);
 
         // ALTERAÇÃO: o payload agora envia diretamente o ID do tipo de recurso.
-        TipoRecurso tipo = tipoRecursoRepository.findById(request.tipoRecurso())
+        TipoRecurso tipo = tipoRecursoRepository.findById(request.tipoRecurso().id())
                 .orElseThrow(() -> new EntityNotFoundException(
                 "Tipo de recurso não encontrado com ID: " + request.tipoRecurso()));
 
@@ -76,7 +76,7 @@ public class RecursoService {
         entity.setNome(request.nome());
 
         // ALTERAÇÃO: utiliza diretamente o ID recebido no payload.
-        TipoRecurso tipo = tipoRecursoRepository.findById(request.tipoRecurso())
+        TipoRecurso tipo = tipoRecursoRepository.findById(request.tipoRecurso().id())
                 .orElseThrow(() -> new EntityNotFoundException(
                 "Tipo de recurso não encontrado com ID: " + request.tipoRecurso()));
 
