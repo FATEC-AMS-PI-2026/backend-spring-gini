@@ -159,13 +159,13 @@ class AlocacaoServiceTest {
 
         when(professorRepository.existsById(5L)).thenReturn(true);
         when(blocoHorarioRepository.findById(1L)).thenReturn(Optional.of(bloco));
-        doThrow(new BusinessException("O intervalo mínimo de interjornada de 12h não foi respeitado."))
+        doThrow(new BusinessException("O intervalo mínimo de interjornada de 11h não foi respeitado."))
                 .when(validarCargaHorariaUseCase).validar(eq(5L), eq(DiaSemana.SEGUNDA), any(Alocacao.class));
 
         ValidarCargaHorariaResponse response = service.validarCargaHorariaSemPersistir(request);
 
         assertThat(response.valido()).isFalse();
-        assertThat(response.mensagem()).isEqualTo("O intervalo mínimo de interjornada de 12h não foi respeitado.");
+        assertThat(response.mensagem()).isEqualTo("O intervalo mínimo de interjornada de 11h não foi respeitado.");
     }
 
     @Test

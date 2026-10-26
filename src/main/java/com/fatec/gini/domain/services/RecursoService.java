@@ -11,7 +11,9 @@ import com.fatec.gini.dto.recurso.RecursoRequest;
 import com.fatec.gini.dto.recurso.RecursoResponse;
 import com.fatec.gini.infrastructure.mappers.RecursoMapper;
 import com.fatec.gini.infrastructure.repositories.RecursoRepository;
+import com.fatec.gini.infrastructure.repositories.RecursoSalaRepository;
 import com.fatec.gini.infrastructure.repositories.TipoRecursoRepository;
+import com.fatec.gini.web.exception.BusinessException;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class RecursoService {
 
     private final RecursoRepository repository;
+    private final RecursoSalaRepository recursoSalaRepository;
     private final TipoRecursoRepository tipoRecursoRepository;
 
     @Transactional
@@ -89,6 +92,11 @@ public class RecursoService {
     public void deletar(Long id) {
         if (!repository.existsById(id)) {
             throw new EntityNotFoundException("Recurso não encontrado com ID: " + id);
+        }
+        if (recursoSalaRepository.existsByRecursoId(id)) {
+            throw new BusinessException(
+                    "Não é possível excluir este recurso porque ele está vinculado a uma ou mais salas. "
+                            + "Remova os vínculos com as salas antes de tentar novamente.");
         }
         repository.deleteById(id);
     }
